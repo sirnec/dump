@@ -24,8 +24,6 @@ and open the template in the editor.
             $date->setTimestamp(1404883248);
             
             var_dump($date);
-            
-            var_dump(CURL_SSLVERSION_TLSv1_1);
         ?>
     </body>
 </html>
