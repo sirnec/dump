@@ -104,6 +104,16 @@ $haystacks = [
     'tv.twitch.android.app-4.3.3-87-minAPI16.apk',
 ];
 
+$base = '/home/rhinoda/soft';
+
+mkdir($base, 0777);
+
+foreach ($haystacks as $file) {
+    file_put_contents("$base/$file", 'apk');
+}
+
+die();
+
 $domains = "ru\.|de\.es\.|eu\.|io\.|jp\.co\.|jp\.|me\.|net\.|org\.|se\.";
 $regexp = "/^($domains)?([^-^_]+)[-_]((?:(?!([-_]minAPI)).)+)[-_](minAPI[^\.]+)/";
 
