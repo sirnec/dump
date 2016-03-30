@@ -11,8 +11,8 @@ function generate($alphabet, $length){
     for($i = 0; $i < $length; $i++) {
         
         $pos = rand(0, $alphabet_length - 1);
-        
-        $pass .= substr($alphabet, $pos, 1);
+
+        $pass .= $alphabet[$pos];
     }
     
     return $pass;
@@ -26,5 +26,5 @@ do {
     
 }while(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$?!_=])/', $pass));
 
-echo $pass;
+echo $pass . PHP_EOL;
 
