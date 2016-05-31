@@ -1,10 +1,16 @@
 <?php
 
-if ($file = $_GET['load']) {
-    echo htmlspecialchars(file_get_contents($file)); die;
+if (isset($_GET['load']) && $file = $_GET['load']) {
+    include $file; die;
 }
 
-$folder = $_GET['path'] ?: __DIR__;
+if (isset($_GET['view']) && $file = $_GET['view']) {
+    $data = file_get_contents($file);
+
+    echo htmlspecialchars($data); die;
+}
+
+$folder = isset($_GET['path']) ? $_GET['path'] : __DIR__;
 
 $dir = scandir($folder);
 
@@ -16,9 +22,14 @@ $dir = scandir($folder);
     <?php foreach ($dir as $file) : ?>
         <?php if ($file != '.' && $file != '..') : ?>
             <?php if (is_dir("$folder/$file")) : ?>
-                <li class="dir" data-link="<?= "$folder/$file" ?>"><?= $file ?></li>
+                <li class="dir" data-link="<?= "$folder/$file" ?>">
+                    <?= $file ?>
+                </li>
             <?php else : ?>
-                <li class="file" data-link="<?= "$folder/$file" ?>"><?= $file ?></li>
+                <li class="file" data-link="<?= "$folder/$file" ?>">
+                    <?= $file ?>
+                    <span class="source">@</span>
+                </li>
             <?php endif ?>
         <?php endif ?>
     <?php endforeach ?>
@@ -46,6 +57,13 @@ $dir = scandir($folder);
             if ($elem.hasClass('dir') && $('.tree', $elem).length == 0) {
 
                 $elem.load('?path=' + encodeURI($elem.data('link')));
+            }
+
+            if ($elem.hasClass('source')) {
+
+                $file = $elem.parents('.file');
+
+                $('.file-container').load('?view=' + encodeURI($file.data('link')));
             }
 
         });
