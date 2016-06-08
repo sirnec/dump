@@ -16,6 +16,52 @@ $dir = scandir($folder);
 
 ?>
 
+<?php if ($folder == __DIR__) : ?>
+
+<style>
+    * {
+        margin:0;
+        padding:0;
+    }
+
+    .tree-container {
+        box-sizing: border-box;
+        padding: 10px;
+        height: 100%;
+        overflow: scroll;
+    }
+
+    .file-container {
+        height: 100%;
+        overflow: scroll;
+    }
+
+    .tree {
+        padding-left: 10px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    @media screen and (min-width: 800px) {
+        .tree-container {
+            width: 30%;
+            float: left;
+        }
+
+        .file-container {
+            width: 70%;
+            float: left;
+        }
+    }
+
+</style>
+
+<div class="tree-container">
+
+<?php endif; ?>
+
 <?= basename($folder) ?>
 
 <ul class="tree">
@@ -37,7 +83,9 @@ $dir = scandir($folder);
 
 <?php if ($folder == __DIR__) : ?>
 
-    <pre class="file-container"></pre>
+</div>
+
+    <pre class="file-container" contenteditable="true"></pre>
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
@@ -54,9 +102,13 @@ $dir = scandir($folder);
                 $('.file-container').load('?load=' + encodeURI($elem.data('link')));
             }
 
-            if ($elem.hasClass('dir') && $('.tree', $elem).length == 0) {
+            if ($elem.hasClass('dir')) {
 
-                $elem.load('?path=' + encodeURI($elem.data('link')));
+                if ($('.tree', $elem).length == 0) {
+                    $elem.load('?path=' + encodeURI($elem.data('link')));
+                } else {
+                    $('.tree', $elem).toggleClass('hidden');
+                }
             }
 
             if ($elem.hasClass('source')) {
