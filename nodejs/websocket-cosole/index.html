@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Console</title>
+    <style>
+        html, body, .console-container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .console-container {
+            background-color: black;
+            color: white;
+            overflow: scroll;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        .console-input {
+            border: solid 1px white;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+</head>
+<body>
+    <div class="console-container">
+        <div class="console-log">
+
+        </div>
+        <div class="console-input" contenteditable="true">
+
+        </div>
+    </div>
+    <script>
+        $(function($, undefined) {
+
+            var server = new WebSocket('ws://' + location.host + ':10080');
+
+            function sendRequest(command, callback)
+            {
+                server.onmessage = function (message) {
+                    callback(message.data);
+                };
+
+                server.send(command);
+            }
+
+            $('.console-input').keydown(function (e) {
+
+                if (e.keyCode == 13) {
+                    var command = $(this).text();
+                    $(this).html('');
+
+                    sendRequest(command, function (data) {
+                        data = data.replace(new RegExp(" ", 'g'), '&nbsp;');
+                        data = '<div>' + data.replace(new RegExp("\n", 'g'), '</div><div>') + '</div>';
+
+                        $('.console-log').html($('.console-log').html() + data);
+                    });
+
+                    e.preventDefault();
+                }
+
+            });
+
+        } (jQuery));
+    </script>
+</body>
+</html>
